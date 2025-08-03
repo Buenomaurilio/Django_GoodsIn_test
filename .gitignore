@@ -1,0 +1,4 @@
+appointments_project/settings.py
+__pycache__/
+*.pyc
+db.sqlite3
