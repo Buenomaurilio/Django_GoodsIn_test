@@ -121,7 +121,7 @@
             {% elif appt.status_load|lower == 'rescheduled' %}
               bg-warning text-dark
             {% elif appt.status_load|lower == 'canceled' %}
-              bg-orange text-white
+              bg-warning text-dark
             {% elif appt.status_load|lower == 'no show up' %}
               bg-danger
             {% else %}
