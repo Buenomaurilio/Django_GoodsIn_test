@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Header e Filtros fixos -->
+<div class="sticky-top py-3 dark-bg" style="top: 0; z-index: 1020;">
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+    <h2 class="mb-0">Dashboard</h2>
+
+    <form method="get" class="d-flex align-items-center gap-2">
+      <input type="date" name="date" class="form-control form-control-sm w-auto" value="{{ selected_date|date:'Y-m-d' }}">
+      <button type="submit" class="btn btn-sm btn-primary">🔍 Filter</button>
+    </form>
+  </div>
+
+  <!-- KPIs Pallets -->
+  <div class="row mb-2">
+    <div class="col">
+      <div class="alert alert-primary text-center py-2 mb-1">
+        <strong>Pallets Today:</strong> {{ pallets_today }}
+      </div>
+    </div>
+    <div class="col">
+      <div class="alert alert-info text-center py-2 mb-1">
+        <strong>Pallets This Week:</strong> {{ pallets_week }}
+      </div>
+    </div>
+    <div class="col">
+      <div class="alert alert-secondary text-center py-2 mb-1">
+        <strong>Pallets This Month:</strong> {{ pallets_month }}
+      </div>
+    </div>
+    <div class="col">
+      <div class="alert alert-dark text-center py-2 mb-1">
+        <strong>Total Pallets:</strong> {{ pallets_total }}
+      </div>
+    </div>
+  </div>
+
+  <!-- KPIs Loads -->
+  <div class="row mb-0">
+    <div class="col">
+      <div class="alert alert-success text-center py-2 mb-1">
+        <strong>Loads Today:</strong> {{ loads_today }}
+      </div>
+    </div>
+    <div class="col">
+      <div class="alert alert-warning text-center py-2 mb-1">
+        <strong>Loads This Week:</strong> {{ loads_week }}
+      </div>
+    </div>
+    <div class="col">
+      <div class="alert alert-info text-center py-2 mb-1">
+        <strong>Loads This Month:</strong> {{ loads_month }}
+      </div>
+    </div>
+    <div class="col">
+      <div class="alert alert-secondary text-center py-2 mb-1">
+        <strong>Total Loads:</strong> {{ loads_total }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Área com rolagem só para gráficos -->
+<div class="chart-scrollable mt-3">
+
+  <!-- Gráficos: Checker por período -->
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <canvas id="checkerChartDay" data-chart='{{ checker_day|safe }}'></canvas>
+    </div>
+    <div class="col-md-6 mb-4">
+      <canvas id="checkerChartWeek" data-chart='{{ checker_week|safe }}'></canvas>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-md-12">
+      <canvas id="checkerChartMonth" data-chart='{{ checker_month|safe }}'></canvas>
+    </div>
+  </div>
+
+  <!-- Gráficos: Status por período -->
+  <div class="row">
+    <div class="col-md-4 mb-4">
+      <canvas id="statusChartDay" data-chart='{{ loads_status_day|safe }}'></canvas>
+    </div>
+    <div class="col-md-4 mb-4">
+      <canvas id="statusChartWeek" data-chart='{{ loads_status_week|safe }}'></canvas>
+    </div>
+    <div class="col-md-4 mb-4">
+      <canvas id="statusChartMonth" data-chart='{{ loads_status_month|safe }}'></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+  const checkerDayData = {{ checker_day|safe }};
+  const checkerWeekData = {{ checker_week|safe }};
+  const checkerMonthData = {{ checker_month|safe }};
+  const statusDayData = {{ loads_status_day|safe }};
+  const statusWeekData = {{ loads_status_week|safe }};
+  const statusMonthData = {{ loads_status_month|safe }};
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'appointments/js/dashboard_charts.js' %}"></script>
+
+<style>
+  .chart-scrollable {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding: 0 10px;
+  }
+
+  canvas {
+    background-color: transparent;
+    width: 100% !important;
+    height: auto !important;
+  }
+</style>
+
+{% endblock %}
