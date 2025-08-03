@@ -115,6 +115,24 @@
         <td>{{ appt.bay1 }}</td>
         {% comment %} <td>{{ appt.status_load|title }}</td> {% endcomment %}
         <td>
+            <span class="badge
+              {% if appt.status_load|lower == 'on time' %}
+                bg-success
+              {% elif appt.status_load|lower == 'rescheduled' %}
+                bg-warning text-dark
+              {% elif appt.status_load|lower == 'canceled' %}
+                text-white" style="background-color: #FF9800
+              {% elif appt.status_load|lower == 'no show up' %}
+                bg-danger
+              {% else %}
+                bg-secondary
+              {% endif %}
+            ">
+              {{ appt.status_load|title }}
+            </span>
+          </td>
+
+<!--         <td>
           <span class="badge
             {% if appt.status_load|lower == 'on time' %}
               bg-success
@@ -130,7 +148,7 @@
           ">
             {{ appt.status_load|title }}
           </span>
-        </td>
+        </td> -->
 
         <td>
           <a href="{% url 'edit_appointment' appt.id %}" class="btn btn-sm btn-primary">Edit</a>
