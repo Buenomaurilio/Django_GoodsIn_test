@@ -16,10 +16,13 @@ function renderBarChart(canvasId, data, label, labelField, valueField, color = '
         "canceled": "#FF9800",     // laranja
         "no show up": "#F44336",   // vermelho
     };
-
     const backgroundColors = labels.map(label => {
-        return statusColors[label.toLowerCase()] || color;
+        const normalized = label.trim().toLowerCase();  // remove espaços e põe em minúsculas
+        return statusColors[normalized] || color;
     });
+    // const backgroundColors = labels.map(label => {
+    //     return statusColors[label.toLowerCase()] || color;
+    // });
 
     new Chart(ctx, {
         type: 'bar',
