@@ -22,6 +22,8 @@ urlpatterns = [
     path('delete/<int:pk>/', views.delete_appointment, name='delete_appointment'),
     path('appointments/table/', views.appointment_table_partial, name='appointment_table_partial'),
     path('dashboard/', dashboard_view, name='dashboard'),
+    path('dashboard/export/', views.export_dashboard_csv, name='export_dashboard_csv'),
+
 ]
 
 # from django.contrib.auth import views as auth_views

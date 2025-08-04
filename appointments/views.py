@@ -1,19 +1,21 @@
+from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.dateparse import parse_date, parse_time
+from django.contrib.auth.decorators import login_required
+from django.template.loader import render_to_string
+from django.http import HttpResponse, JsonResponse
+from .forms import AppointmentForm, CheckerForm
+from .models import Appointment, Checker
+from datetime import timedelta, datetime
 from django.db.models import Sum, Count
 from django.utils.timezone import now
-from django.utils.dateparse import parse_date, parse_time
-from datetime import timedelta
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.contrib import messages
-from django.http import HttpResponse, JsonResponse
-from django.template.loader import render_to_string
+from .models import Appointment
 from django import forms
+import json
 import csv
 import io
-import json
 
-from .models import Appointment, Checker
-from .forms import AppointmentForm, CheckerForm
 
 class CSVImportForm(forms.Form):
     file = forms.FileField()
@@ -300,3 +302,26 @@ def appointment_table_partial(request):
             'appointments': appointments
         })
     })
+
+
+def export_dashboard_csv(request):
+    selected_date = request.GET.get('date')
+    appointments = Appointment.objects.all()
+
+    if selected_date:
+        appointments = appointments.filter(scheduled_date=selected_date)
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="dashboard_{selected_date or "all"}.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['ID', 'Description', 'Date', 'Time', 'P.O', 'Qty', 'Hall', 'Tipped', 'Checked', 'Checker', 'Status'])
+
+    for a in appointments:
+        writer.writerow([
+            a.id, a.description, a.scheduled_date, a.scheduled_time, a.po, a.qtd_pallet,
+            a.hall, 'Yes' if a.tipped else 'No', 'Yes' if a.checked else 'No',
+            a.checker, a.status_load
+        ])
+
+    return response
