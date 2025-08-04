@@ -15,7 +15,8 @@
       <input type="date" name="date" class="form-control form-control-sm w-auto" value="{{ selected_date|date:'Y-m-d' }}">
       <button type="submit" class="btn btn-sm btn-primary">🔍 Filter</button>
       <a href="{% url 'dashboard' %}" class="btn btn-sm btn-secondary">🧹 Clear</a>
-      <button class="btn btn-sm btn-success" onclick="exportDashboardAsImage()">🖼️ Export Dashboard</button>
+      <button type="button" class="btn btn-success btn-sm" onclick="exportAllChartsAsImage()">📊 Export Dashboard</button>
+      {% comment %} <button class="btn btn-sm btn-success" onclick="exportDashboardAsImage()">🖼️ Export Dashboard</button> {% endcomment %}
       {% comment %} <button id="exportCharts" class="btn btn-sm btn-outline-dark">📷 Export Charts</button> {% endcomment %}
       {% comment %} <a href="{% url 'export_dashboard_csv' %}?date={{ selected_date|date:'Y-m-d' }}" class="btn btn-sm btn-success">📤 Export CSV</a> {% endcomment %}
     </form>
@@ -121,22 +122,37 @@
 <script src="{% static 'appointments/js/dashboard_charts.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
-  function exportDashboardAsImage() {
-    const target = document.body;
-    html2canvas(target, {
-      backgroundColor: null,
-      scale: 2
-    }).then(canvas => {
-      const link = document.createElement('a');
-      link.download = 'dashboard.png';
-      link.href = canvas.toDataURL();
-      link.click();
+  function exportAllChartsAsImage() {
+    const canvases = document.querySelectorAll("canvas");
+    const padding = 30;
+    const spacing = 50;
+    const totalHeight = Array.from(canvases).reduce((acc, canvas) => acc + canvas.height + spacing, 0);
+    const maxWidth = Math.max(...Array.from(canvases).map(c => c.width));
+
+    // Cria um canvas vazio para juntar todos
+    const exportCanvas = document.createElement("canvas");
+    exportCanvas.width = maxWidth + 2 * padding;
+    exportCanvas.height = totalHeight + padding;
+    const ctx = exportCanvas.getContext("2d");
+
+    // Cor de fundo (opcional)
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+
+    // Desenha os gráficos um abaixo do outro
+    let yOffset = padding;
+    canvases.forEach(c => {
+      ctx.drawImage(c, padding, yOffset, c.width, c.height);
+      yOffset += c.height + spacing;
     });
+
+    // Baixa a imagem
+    const link = document.createElement("a");
+    link.download = "all_charts.png";
+    link.href = exportCanvas.toDataURL();
+    link.click();
   }
 </script>
-
-
-
 
 <style>
   .chart-scrollable {
