@@ -220,16 +220,39 @@ def add_checker(request):
 
 @login_required
 def export_appointments_csv(request):
-    data_filter = request.GET.get('date')
     appointments = Appointment.objects.all()
-    if data_filter:
-        appointments = appointments.filter(scheduled_date=data_filter)
 
+    # Filtros da URL
+    date_filter = request.GET.get('date')
+    hall = request.GET.get('hall')
+    checker = request.GET.get('checker')
+    status = request.GET.get('status')
+    tipped = request.GET.get('tipped')
+    checked = request.GET.get('checked')
+
+    if date_filter:
+        appointments = appointments.filter(scheduled_date=date_filter)
+    if hall:
+        appointments = appointments.filter(hall=hall)
+    if checker:
+        appointments = appointments.filter(checker__id=checker)
+    if status:
+        appointments = appointments.filter(status_load=status)
+    if tipped in ['true', 'false']:
+        appointments = appointments.filter(tipped=(tipped == 'true'))
+    if checked in ['true', 'false']:
+        appointments = appointments.filter(checked=(checked == 'true'))
+
+    # Resposta CSV
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="appointments.csv"'
+    response['Content-Disposition'] = 'attachment; filename="appointments_filtered.csv"'
 
     writer = csv.writer(response)
-    writer.writerow(['ID', 'Description', 'Date', 'Time', 'P.O', 'Qty', 'Hall', 'Tipped', 'Checked', 'Checker'])
+    writer.writerow([
+        'ID', 'Description', 'Date', 'Time', 'P.O', 'Qty',
+        'Hall', 'Tipped', 'Checked', 'Checker', 'Status',
+        'Arrival Time', 'Check Out Time', 'Bay 1'
+    ])
 
     for appt in appointments:
         writer.writerow([
@@ -240,12 +263,45 @@ def export_appointments_csv(request):
             appt.po,
             appt.qtd_pallet,
             appt.hall,
-            appt.tipped,
-            appt.checked,
-            appt.checker.name if appt.checker else ''
+            'Yes' if appt.tipped else 'No',
+            'Yes' if appt.checked else 'No',
+            appt.checker.name if appt.checker else '',
+            appt.status_load,
+            appt.arrival_time,
+            appt.check_out_time,
+            appt.bay1,
         ])
 
     return response
+
+# @login_required
+# def export_appointments_csv(request):
+#     data_filter = request.GET.get('date')
+#     appointments = Appointment.objects.all()
+#     if data_filter:
+#         appointments = appointments.filter(scheduled_date=data_filter)
+
+#     response = HttpResponse(content_type='text/csv')
+#     response['Content-Disposition'] = 'attachment; filename="appointments.csv"'
+
+#     writer = csv.writer(response)
+#     writer.writerow(['ID', 'Description', 'Date', 'Time', 'P.O', 'Qty', 'Hall', 'Tipped', 'Checked', 'Checker'])
+
+#     for appt in appointments:
+#         writer.writerow([
+#             appt.id,
+#             appt.description,
+#             appt.scheduled_date,
+#             appt.scheduled_time,
+#             appt.po,
+#             appt.qtd_pallet,
+#             appt.hall,
+#             appt.tipped,
+#             appt.checked,
+#             appt.checker.name if appt.checker else ''
+#         ])
+
+#     return response
 
 @login_required
 def import_appointments_csv(request):
