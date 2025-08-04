@@ -135,31 +135,6 @@
   }
 </script>
 
-<script>
-  document.getElementById("exportCharts").addEventListener("click", async function () {
-    const charts = [
-      document.getElementById("checkerChartDay"),
-      document.getElementById("checkerChartWeek"),
-      document.getElementById("checkerChartMonth"),
-      document.getElementById("statusChartDay"),
-      document.getElementById("statusChartWeek"),
-      document.getElementById("statusChartMonth")
-    ];
-
-    for (let i = 0; i < charts.length; i++) {
-      const canvas = charts[i];
-      if (canvas) {
-        const link = document.createElement('a');
-        link.download = `chart_${i + 1}.png`;
-        link.href = canvas.toDataURL('image/png');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        await new Promise(resolve => setTimeout(resolve, 300)); // espera 300ms entre cada download
-      }
-    }
-  });
-</script>
 
 
 
