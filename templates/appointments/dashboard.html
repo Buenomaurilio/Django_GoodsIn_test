@@ -119,7 +119,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{% static 'appointments/js/dashboard_charts.js' %}"></script>
 <script>
-  document.getElementById("exportCharts").addEventListener("click", function () {
+  document.getElementById("exportCharts").addEventListener("click", async function () {
     const charts = [
       document.getElementById("checkerChartDay"),
       document.getElementById("checkerChartWeek"),
@@ -129,14 +129,21 @@
       document.getElementById("statusChartMonth")
     ];
 
-    charts.forEach((canvas, index) => {
-      const link = document.createElement('a');
-      link.download = `chart_${index + 1}.png`;
-      link.href = canvas.toDataURL();
-      link.click();
-    });
+    for (let i = 0; i < charts.length; i++) {
+      const canvas = charts[i];
+      if (canvas) {
+        const link = document.createElement('a');
+        link.download = `chart_${i + 1}.png`;
+        link.href = canvas.toDataURL('image/png');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        await new Promise(resolve => setTimeout(resolve, 300)); // espera 300ms entre cada download
+      }
+    }
   });
 </script>
+
 
 
 <style>
