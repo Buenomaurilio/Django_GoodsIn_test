@@ -3,98 +3,95 @@
 {% block content %}
 
 <!-- Header e Filtros fixos -->
-<div class="sticky-top py-3 dark-bg" style="top: 0; z-index: 1020;">
-  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
-    <h2 class="mb-0">Dashboard</h2>
-    <form method="get" class="d-flex align-items-center gap-2"> 
-      <input type="date" name="date" class="form-control form-control-sm w-auto" value="{{ selected_date|date:'Y-m-d' }}">
-      <button type="submit" class="btn btn-sm btn-primary">🔍 Filter</button>
-      <a href="{% url 'dashboard' %}" class="btn btn-sm btn-secondary">🧹 Clear</a>
-    </form>
+<div class="sticky-top py-3 bg-body dark-bg" style="top: 0; z-index: 1020;">
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+    <h2 class="mb-0 fw-bold">Dashboard</h2>
 
-<!--     <form method="get" class="d-flex align-items-center gap-2">
-      <input type="date" name="date" class="form-control form-control-sm w-auto" value="{{ selected_date|date:'Y-m-d' }}">
-      <button type="submit" class="btn btn-sm btn-primary">🔍 Filter</button>
-    </form> -->
+    <form method="get" class="row gx-2 gy-2 align-items-center w-100">
+      <div class="col-12 col-sm-auto">
+        <input type="date" name="date" class="form-control form-control-sm" value="{{ selected_date|date:'Y-m-d' }}">
+      </div>
+      <div class="col-6 col-sm-auto">
+        <button type="submit" class="btn btn-sm btn-primary w-100">🔍 Filter</button>
+      </div>
+      <div class="col-6 col-sm-auto">
+        <a href="{% url 'dashboard' %}" class="btn btn-sm btn-secondary w-100">🧹 Clear</a>
+      </div>
+    </form>
   </div>
 
   <!-- KPIs Pallets -->
   <div class="row mb-2">
-    <div class="col">
-      <div class="alert alert-primary text-center py-2 mb-1">
-        <strong>Pallets Today:</strong> {{ pallets_today }}
+    <div class="col-6 col-sm-6 col-md-3 mb-2">
+      <div class="card text-center text-white bg-primary h-100">
+        <div class="card-body py-2"><strong>Pallets Today:</strong> {{ pallets_today }}</div>
       </div>
     </div>
-    <div class="col">
-      <div class="alert alert-info text-center py-2 mb-1">
-        <strong>Pallets This Week:</strong> {{ pallets_week }}
+    <div class="col-6 col-sm-6 col-md-3 mb-2">
+      <div class="card text-center text-dark bg-info h-100">
+        <div class="card-body py-2"><strong>Pallets This Week:</strong> {{ pallets_week }}</div>
       </div>
     </div>
-    <div class="col">
-      <div class="alert alert-secondary text-center py-2 mb-1">
-        <strong>Pallets This Month:</strong> {{ pallets_month }}
+    <div class="col-6 col-sm-6 col-md-3 mb-2">
+      <div class="card text-center text-white bg-secondary h-100">
+        <div class="card-body py-2"><strong>Pallets This Month:</strong> {{ pallets_month }}</div>
       </div>
     </div>
-    <div class="col">
-      <div class="alert alert-dark text-center py-2 mb-1">
-        <strong>Total Pallets:</strong> {{ pallets_total }}
+    <div class="col-6 col-sm-6 col-md-3 mb-2">
+      <div class="card text-center text-white bg-dark h-100">
+        <div class="card-body py-2"><strong>Total Pallets:</strong> {{ pallets_total }}</div>
       </div>
     </div>
   </div>
 
   <!-- KPIs Loads -->
-  <div class="row mb-0">
-    <div class="col">
-      <div class="alert alert-success text-center py-2 mb-1">
-        <strong>Loads Today:</strong> {{ loads_today }}
+  <div class="row">
+    <div class="col-6 col-sm-6 col-md-3 mb-2">
+      <div class="card text-center text-white bg-success h-100">
+        <div class="card-body py-2"><strong>Loads Today:</strong> {{ loads_today }}</div>
       </div>
     </div>
-    <div class="col">
-      <div class="alert alert-warning text-center py-2 mb-1">
-        <strong>Loads This Week:</strong> {{ loads_week }}
+    <div class="col-6 col-sm-6 col-md-3 mb-2">
+      <div class="card text-center text-dark bg-warning h-100">
+        <div class="card-body py-2"><strong>Loads This Week:</strong> {{ loads_week }}</div>
       </div>
     </div>
-    <div class="col">
-      <div class="alert alert-info text-center py-2 mb-1">
-        <strong>Loads This Month:</strong> {{ loads_month }}
+    <div class="col-6 col-sm-6 col-md-3 mb-2">
+      <div class="card text-center text-dark bg-info h-100">
+        <div class="card-body py-2"><strong>Loads This Month:</strong> {{ loads_month }}</div>
       </div>
     </div>
-    <div class="col">
-      <div class="alert alert-secondary text-center py-2 mb-1">
-        <strong>Total Loads:</strong> {{ loads_total }}
+    <div class="col-6 col-sm-6 col-md-3 mb-2">
+      <div class="card text-center text-white bg-secondary h-100">
+        <div class="card-body py-2"><strong>Total Loads:</strong> {{ loads_total }}</div>
       </div>
     </div>
   </div>
 </div>
 
 <!-- Área com rolagem só para gráficos -->
-<div class="chart-scrollable mt-3">
-
-  <!-- Gráficos: Checker por período -->
+<div class="chart-scrollable mt-4">
   <div class="row">
-    <div class="col-md-6 mb-4">
+    <div class="col-12 col-md-6 mb-4">
       <canvas id="checkerChartDay" data-chart='{{ checker_day|safe }}'></canvas>
     </div>
-    <div class="col-md-6 mb-4">
+    <div class="col-12 col-md-6 mb-4">
       <canvas id="checkerChartWeek" data-chart='{{ checker_week|safe }}'></canvas>
     </div>
   </div>
-
   <div class="row mb-4">
-    <div class="col-md-12">
+    <div class="col-12">
       <canvas id="checkerChartMonth" data-chart='{{ checker_month|safe }}'></canvas>
     </div>
   </div>
-
-  <!-- Gráficos: Status por período -->
   <div class="row">
-    <div class="col-md-4 mb-4">
+    <div class="col-12 col-md-4 mb-4">
       <canvas id="statusChartDay" data-chart='{{ loads_status_day|safe }}'></canvas>
     </div>
-    <div class="col-md-4 mb-4">
+    <div class="col-12 col-md-4 mb-4">
       <canvas id="statusChartWeek" data-chart='{{ loads_status_week|safe }}'></canvas>
     </div>
-    <div class="col-md-4 mb-4">
+    <div class="col-12 col-md-4 mb-4">
       <canvas id="statusChartMonth" data-chart='{{ loads_status_month|safe }}'></canvas>
     </div>
   </div>
@@ -118,11 +115,28 @@
     overflow-y: auto;
     padding: 0 10px;
   }
-
   canvas {
     background-color: transparent;
     width: 100% !important;
     height: auto !important;
+  }
+  @media (max-width: 768px) {
+    .card-body {
+      font-size: 0.9rem;
+      padding: 0.5rem;
+    }
+    h2 {
+      font-size: 1.2rem;
+    }
+    form input,
+    form button,
+    form a {
+      flex-grow: 1;
+      min-width: 100%;
+    }
+    .chart-scrollable {
+      padding: 0;
+    }
   }
 </style>
 
