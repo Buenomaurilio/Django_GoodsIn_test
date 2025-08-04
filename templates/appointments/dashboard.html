@@ -122,10 +122,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
   function exportDashboardAsImage() {
-    const target = document.querySelector('.chart-scrollable');
+    const target = document.body;
     html2canvas(target, {
       backgroundColor: null,
-      scale: 2,
+      scale: 2
     }).then(canvas => {
       const link = document.createElement('a');
       link.download = 'dashboard.png';
