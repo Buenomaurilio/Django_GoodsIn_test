@@ -39,13 +39,12 @@ def appointment_list(request):
     if description_filter:
         appointments = appointments.filter(description__icontains=description_filter)
 
-    # if description_filter:
-    #     appointments = appointments.filter(descricao__icontains=description_filter)
 
     appointments = appointments.order_by('scheduled_time')
-
-    morning_shift = appointments.filter(scheduled_time__gte=parse_time("05:00"), scheduled_time__lt=parse_time("13:30"))
-    back_shift = appointments.filter(scheduled_time__gte=parse_time("13:00"), scheduled_time__lt=parse_time("21:30"))
+    morning_shift = appointments.filter(scheduled_time__gte=parse_time("04:00"), scheduled_time__lte=parse_time("13:30"))
+    back_shift = appointments.filter(scheduled_time__gt=parse_time("13:30"), scheduled_time__lte=parse_time("22:00"))
+    # morning_shift = appointments.filter(scheduled_time__gte=parse_time("04:00"), scheduled_time__lte=parse_time("13:30"))
+    # back_shift = appointments.filter(scheduled_time__gt=parse_time("13:00"), scheduled_time__lte=parse_time("22:00"))
 
     context = {
         'appointments': appointments,
@@ -58,35 +57,6 @@ def appointment_list(request):
     }
     return render(request, 'appointments/appointment_list.html', context)
 
-# @login_required
-# def appointment_list(request):
-#     today = now().date()
-#     data_filter = request.GET.get('date', today)
-#     po_filter = request.GET.get('po', '').strip()
-
-#     if isinstance(data_filter, str):
-#         data_filter = parse_date(data_filter)
-
-#     appointments = Appointment.objects.filter(scheduled_date=data_filter)
-
-#     if po_filter:
-#         appointments = appointments.filter(po__icontains=po_filter)
-
-#     appointments = appointments.order_by('scheduled_time')
-
-#     morning_shift = appointments.filter(scheduled_time__gte=parse_time("05:00"), scheduled_time__lt=parse_time("13:30"))
-#     back_shift = appointments.filter(scheduled_time__gte=parse_time("13:00"), scheduled_time__lt=parse_time("21:30"))
-
-#     context = {
-#         'appointments': appointments,
-#         'data_filter': data_filter,
-#         'total_appointments': appointments.count(),
-#         'morning_count': morning_shift.count(),
-#         'back_count': back_shift.count(),
-#         'morning_pallets': morning_shift.aggregate(Sum('qtd_pallet'))['qtd_pallet__sum'] or 0,
-#         'back_pallets': back_shift.aggregate(Sum('qtd_pallet'))['qtd_pallet__sum'] or 0,
-#     }
-#     return render(request, 'appointments/appointment_list.html', context)
 
 @login_required
 def dashboard_view(request):
@@ -133,20 +103,6 @@ def dashboard_view(request):
         .order_by('-total')
     )
     
-    # checker_day = list(Appointment.objects.filter(scheduled_date=selected_date)
-    #     .values('checker__name')
-    #     .annotate(total=Sum('qtd_pallet'))
-    #     .order_by('-total'))
-
-    # checker_week = list(Appointment.objects.filter(scheduled_date__range=(start_of_week, end_of_week))
-    #     .values('checker__name')
-    #     .annotate(total=Sum('qtd_pallet'))
-    #     .order_by('-total'))
-
-    # checker_month = list(Appointment.objects.filter(scheduled_date__year=year, scheduled_date__month=month)
-    #     .values('checker__name')
-    #     .annotate(total=Sum('qtd_pallet'))
-    #     .order_by('-total'))
 
     loads_status_day = list(Appointment.objects.filter(scheduled_date=selected_date)
         .values('status_load')
@@ -274,34 +230,6 @@ def export_appointments_csv(request):
 
     return response
 
-# @login_required
-# def export_appointments_csv(request):
-#     data_filter = request.GET.get('date')
-#     appointments = Appointment.objects.all()
-#     if data_filter:
-#         appointments = appointments.filter(scheduled_date=data_filter)
-
-#     response = HttpResponse(content_type='text/csv')
-#     response['Content-Disposition'] = 'attachment; filename="appointments.csv"'
-
-#     writer = csv.writer(response)
-#     writer.writerow(['ID', 'Description', 'Date', 'Time', 'P.O', 'Qty', 'Hall', 'Tipped', 'Checked', 'Checker'])
-
-#     for appt in appointments:
-#         writer.writerow([
-#             appt.id,
-#             appt.description,
-#             appt.scheduled_date,
-#             appt.scheduled_time,
-#             appt.po,
-#             appt.qtd_pallet,
-#             appt.hall,
-#             appt.tipped,
-#             appt.checked,
-#             appt.checker.name if appt.checker else ''
-#         ])
-
-#     return response
 
 @login_required
 def import_appointments_csv(request):

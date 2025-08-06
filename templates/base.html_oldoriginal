@@ -29,11 +29,10 @@
     }
 
     .sidebar {
-      flex: 0 0 220px;
+      flex: 0 0 200px;
       padding-top: 56px;
       background-color: #f8f9fa;
       overflow-y: auto;
-      border-right: 1px solid #e5e5e5;
     }
 
     .sidebar .nav-link {
@@ -44,7 +43,6 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      min-width: 0;
     }
 
     .navbar {
@@ -85,7 +83,6 @@
 
     .dark-mode .sidebar {
       background-color: #2c2c2e;
-      border-right-color: #3a3a3a;
     }
 
     .dark-mode .sidebar .nav-link {
@@ -136,25 +133,6 @@
     .toggle-theme-btn:hover {
       background-color: #5a6268;
     }
-
-    /* Área de ferramentas (filtros/botões) na sidebar */
-    .sidebar-tools .form-label {
-      font-size: 0.8rem;
-      margin-bottom: 0.25rem;
-    }
-    .sidebar-tools .form-control,
-    .sidebar-tools .btn,
-    .sidebar-tools .form-select {
-      width: 100%;
-    }
-    .sidebar-tools .btn + .btn {
-      margin-top: 6px;
-    }
-
-    /* Em telas muito pequenas, permita que a sidebar role e não “apertar” o conteúdo */
-    @media (max-width: 576px) {
-      .sidebar { flex: 0 0 260px; }
-    }
   </style>
 </head>
 <body onload="applySavedTheme()">
@@ -162,8 +140,7 @@
   <!-- Sidebar -->
   <div class="sidebar d-flex flex-column p-3">
     <a class="navbar-brand mb-4 ps-2" href="#">Goods In</a>
-
-    <ul class="nav nav-pills flex-column mb-3">
+    <ul class="nav nav-pills flex-column">
       <li class="nav-item">
         <a class="nav-link {% if request.resolver_match.url_name == 'appointment_list' %}active{% endif %}" href="{% url 'appointment_list' %}">Appointments</a>
       </li>
@@ -171,11 +148,6 @@
         <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">Dashboard</a>
       </li>
     </ul>
-
-    <!-- BLOCO DE FERRAMENTAS/FILTROS ESPECÍFICOS DE CADA PÁGINA -->
-    <div class="sidebar-tools">
-      {% block sidebar_tools %}{% endblock %}
-    </div>
   </div>
 
   <!-- Content -->

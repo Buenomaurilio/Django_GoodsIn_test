@@ -25,5 +25,18 @@ nav .nav-link.active {
   border-radius: 5px;
 }
 
+html, body, .content-wrapper, .content-body {
+  height: 100%;
+}
+
+.table-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.table-responsive {
+  flex: 1;
+}
 
 

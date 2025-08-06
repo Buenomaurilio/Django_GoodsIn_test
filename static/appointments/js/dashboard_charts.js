@@ -20,9 +20,6 @@ function renderBarChart(canvasId, data, label, labelField, valueField, color = '
         const normalized = label.trim().toLowerCase();  // remove espaços e põe em minúsculas
         return statusColors[normalized] || color;
     });
-    // const backgroundColors = labels.map(label => {
-    //     return statusColors[label.toLowerCase()] || color;
-    // });
 
     new Chart(ctx, {
         type: 'bar',

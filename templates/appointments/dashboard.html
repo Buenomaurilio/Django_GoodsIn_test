@@ -1,84 +1,232 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block sidebar_tools %}
+<form method="get" class="d-grid gap-2">
+  {% comment %} <label for="date" class="form-label">Date</label> {% endcomment %}
+  <input type="date" id="date" name="date" class="form-control form-control-sm"
+         value="{{ selected_date|date:'Y-m-d' }}">
+
+  <button type="submit" class="btn btn-sm btn-primary">🔍 Filter</button>
+  <a href="{% url 'dashboard' %}" class="btn btn-sm btn-secondary">🧹 Clear</a>
+  <button type="button" class="btn btn-sm btn-success" onclick="exportAllChartsAsImage()">📊 Export Charts</button>
+</form>
+{% endblock %}
+
 {% block content %}
-
-<!-- Header e Filtros fixos -->
-<div class="sticky-top py-3 dark-bg" style="top: 0; z-index: 1020;">
-  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
-    <h2 class="mb-0">Dashboard</h2>
-    {% comment %} <form method="get" class="d-flex align-items-center gap-2"> 
-      <input type="date" name="date" class="form-control form-control-sm w-auto" value="{{ selected_date|date:'Y-m-d' }}">
-      <button type="submit" class="btn btn-sm btn-primary">🔍 Filter</button>
-      <a href="{% url 'dashboard' %}" class="btn btn-sm btn-secondary">🧹 Clear</a>
-    </form> {% endcomment %}
-    <form method="get" class="d-flex align-items-center gap-2">
-      <input type="date" name="date" class="form-control form-control-sm w-auto" value="{{ selected_date|date:'Y-m-d' }}">
-      <button type="submit" class="btn btn-sm btn-primary">🔍 Filter</button>
-      <a href="{% url 'dashboard' %}" class="btn btn-sm btn-secondary">🧹 Clear</a>
-      <button type="button" class="btn btn-success btn-sm" onclick="exportAllChartsAsImage()">📊 Export Dashboard</button>
-      {% comment %} <button class="btn btn-sm btn-success" onclick="exportDashboardAsImage()">🖼️ Export Dashboard</button> {% endcomment %}
-      {% comment %} <button id="exportCharts" class="btn btn-sm btn-outline-dark">📷 Export Charts</button> {% endcomment %}
-      {% comment %} <a href="{% url 'export_dashboard_csv' %}?date={{ selected_date|date:'Y-m-d' }}" class="btn btn-sm btn-success">📤 Export CSV</a> {% endcomment %}
-    </form>
-
-<!--     <form method="get" class="d-flex align-items-center gap-2">
-      <input type="date" name="date" class="form-control form-control-sm w-auto" value="{{ selected_date|date:'Y-m-d' }}">
-      <button type="submit" class="btn btn-sm btn-primary">🔍 Filter</button>
-    </form> -->
-  </div>
-
-  <!-- KPIs Pallets -->
-  <div class="row mb-2">
-    <div class="col">
-      <div class="alert alert-primary text-center py-2 mb-1">
-        <strong>Pallets Today:</strong> {{ pallets_today }}
-      </div>
-    </div>
-    <div class="col">
-      <div class="alert alert-info text-center py-2 mb-1">
-        <strong>Pallets This Week:</strong> {{ pallets_week }}
-      </div>
-    </div>
-    <div class="col">
-      <div class="alert alert-secondary text-center py-2 mb-1">
-        <strong>Pallets This Month:</strong> {{ pallets_month }}
-      </div>
-    </div>
-    <div class="col">
-      <div class="alert alert-dark text-center py-2 mb-1">
-        <strong>Total Pallets:</strong> {{ pallets_total }}
-      </div>
+<!-- KPIs Pallets -->
+<div class="row mb-2">
+  <div class="col">
+    <div class="alert alert-primary text-center py-2 mb-1">
+      <strong>Pallets Today:</strong> {{ pallets_today }}
     </div>
   </div>
+  <div class="col">
+    <div class="alert alert-info text-center py-2 mb-1">
+      <strong>Pallets This Week:</strong> {{ pallets_week }}
+    </div>
+  </div>
+  <div class="col">
+    <div class="alert alert-secondary text-center py-2 mb-1">
+      <strong>Pallets This Month:</strong> {{ pallets_month }}
+    </div>
+  </div>
+  <div class="col">
+    <div class="alert alert-dark text-center py-2 mb-1">
+      <strong>Total Pallets:</strong> {{ pallets_total }}
+    </div>
+  </div>
+</div>
 
-  <!-- KPIs Loads -->
-  <div class="row mb-0">
-    <div class="col">
-      <div class="alert alert-success text-center py-2 mb-1">
-        <strong>Loads Today:</strong> {{ loads_today }}
-      </div>
+<!-- KPIs Loads -->
+<div class="row mb-3">
+  <div class="col">
+    <div class="alert alert-success text-center py-2 mb-1">
+      <strong>Loads Today:</strong> {{ loads_today }}
     </div>
-    <div class="col">
-      <div class="alert alert-warning text-center py-2 mb-1">
-        <strong>Loads This Week:</strong> {{ loads_week }}
-      </div>
+  </div>
+  <div class="col">
+    <div class="alert alert-warning text-center py-2 mb-1">
+      <strong>Loads This Week:</strong> {{ loads_week }}
     </div>
-    <div class="col">
-      <div class="alert alert-info text-center py-2 mb-1">
-        <strong>Loads This Month:</strong> {{ loads_month }}
-      </div>
+  </div>
+  <div class="col">
+    <div class="alert alert-info text-center py-2 mb-1">
+      <strong>Loads This Month:</strong> {{ loads_month }}
     </div>
-    <div class="col">
-      <div class="alert alert-secondary text-center py-2 mb-1">
-        <strong>Total Loads:</strong> {{ loads_total }}
-      </div>
+  </div>
+  <div class="col">
+    <div class="alert alert-secondary text-center py-2 mb-1">
+      <strong>Total Loads:</strong> {{ loads_total }}
     </div>
   </div>
 </div>
 
 <!-- Área com rolagem só para gráficos -->
 <div class="chart-scrollable mt-3">
+  <!-- Gráficos: Checker por período -->
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <canvas id="checkerChartDay" data-chart='{{ checker_day|safe }}'></canvas>
+    </div>
+    <div class="col-md-6 mb-4">
+      <canvas id="checkerChartWeek" data-chart='{{ checker_week|safe }}'></canvas>
+    </div>
+  </div>
 
+  <div class="row mb-4">
+    <div class="col-md-12">
+      <canvas id="checkerChartMonth" data-chart='{{ checker_month|safe }}'></canvas>
+    </div>
+  </div>
+
+  <!-- Gráficos: Status por período -->
+  <div class="row">
+    <div class="col-md-4 mb-4">
+      <canvas id="statusChartDay" data-chart='{{ loads_status_day|safe }}'></canvas>
+    </div>
+    <div class="col-md-4 mb-4">
+      <canvas id="statusChartWeek" data-chart='{{ loads_status_week|safe }}'></canvas>
+    </div>
+    <div class="col-md-4 mb-4">
+      <canvas id="statusChartMonth" data-chart='{{ loads_status_month|safe }}'></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+  const checkerDayData = {{ checker_day|safe }};
+  const checkerWeekData = {{ checker_week|safe }};
+  const checkerMonthData = {{ checker_month|safe }};
+  const statusDayData = {{ loads_status_day|safe }};
+  const statusWeekData = {{ loads_status_week|safe }};
+  const statusMonthData = {{ loads_status_month|safe }};
+
+  function exportAllChartsAsImage() {
+    const canvases = document.querySelectorAll("canvas");
+    const padding = 30;
+    const spacing = 50;
+    const totalHeight = Array.from(canvases).reduce((acc, canvas) => acc + canvas.height + spacing, 0);
+    const maxWidth = Math.max(...Array.from(canvases).map(c => c.width));
+
+    const exportCanvas = document.createElement("canvas");
+    exportCanvas.width = maxWidth + 2 * padding;
+    exportCanvas.height = totalHeight + padding;
+    const ctx = exportCanvas.getContext("2d");
+
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+
+    let yOffset = padding;
+    canvases.forEach(c => {
+      ctx.drawImage(c, padding, yOffset, c.width, c.height);
+      yOffset += c.height + spacing;
+    });
+
+    const link = document.createElement("a");
+    link.download = "all_charts.png";
+    link.href = exportCanvas.toDataURL();
+    link.click();
+  }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'appointments/js/dashboard_charts.js' %}"></script>
+
+<style>
+.chart-scrollable {
+    min-height: calc(100vh - 250px);  /* ajusta a altura mínima dos gráficos */
+    overflow-y: auto;
+    padding: 0 10px 50px; /* padding extra para espaçamento no final */
+  }
+  {% comment %} .chart-scrollable {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding: 0 10px;
+  } {% endcomment %}
+canvas {
+    background-color: transparent;
+    width: 100% !important;
+    height: auto !important;
+  }
+</style>
+{% endblock %}
+
+
+{% comment %} {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block sidebar_tools %}
+<form method="get" class="d-grid gap-2">
+  {% comment %} <label for="date" class="form-label">Date</label> {% endcomment %}
+  {% comment %} <input type="date" id="date" name="date" class="form-control form-control-sm"
+         value="{{ selected_date|date:'Y-m-d' }}">
+
+  <button type="submit" class="btn btn-sm btn-primary">🔍 Filter</button>
+  <a href="{% url 'dashboard' %}" class="btn btn-sm btn-secondary">🧹 Clear</a>
+  <button id="exportCharts" class="btn btn-sm btn-outline-primary">📄 Export Charts</button>
+ {% endcomment %}
+  {% comment %} <button type="button" id="exportCharts" class="btn btn-sm btn-success">📄 Export Charts</button> {% endcomment %}
+  <!-- (Opcional) Exportar gráficos (HTML-to-canvas/PDF ficou para depois)
+  -->
+{% comment %} </form>
+{% endblock %}
+
+{% block content %}
+<!-- KPIs Pallets -->
+<div class="row mb-2">
+  <div class="col">
+    <div class="alert alert-primary text-center py-2 mb-1">
+      <strong>Pallets Today:</strong> {{ pallets_today }}
+    </div>
+  </div>
+  <div class="col">
+    <div class="alert alert-info text-center py-2 mb-1">
+      <strong>Pallets This Week:</strong> {{ pallets_week }}
+    </div>
+  </div>
+  <div class="col">
+    <div class="alert alert-secondary text-center py-2 mb-1">
+      <strong>Pallets This Month:</strong> {{ pallets_month }}
+    </div>
+  </div>
+  <div class="col">
+    <div class="alert alert-dark text-center py-2 mb-1">
+      <strong>Total Pallets:</strong> {{ pallets_total }}
+    </div>
+  </div>
+</div>
+
+<!-- KPIs Loads -->
+<div class="row mb-3">
+  <div class="col">
+    <div class="alert alert-success text-center py-2 mb-1">
+      <strong>Loads Today:</strong> {{ loads_today }}
+    </div>
+  </div>
+  <div class="col">
+    <div class="alert alert-warning text-center py-2 mb-1">
+      <strong>Loads This Week:</strong> {{ loads_week }}
+    </div>
+  </div>
+  <div class="col">
+    <div class="alert alert-info text-center py-2 mb-1">
+      <strong>Loads This Month:</strong> {{ loads_month }}
+    </div>
+  </div>
+  <div class="col">
+    <div class="alert alert-secondary text-center py-2 mb-1">
+      <strong>Total Loads:</strong> {{ loads_total }}
+    </div>
+  </div>
+</div>
+
+<!-- Área com rolagem só para gráficos -->
+<div class="chart-scrollable mt-3">
   <!-- Gráficos: Checker por período -->
   <div class="row">
     <div class="col-md-6 mb-4">
@@ -120,52 +268,80 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{% static 'appointments/js/dashboard_charts.js' %}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script>
-  function exportAllChartsAsImage() {
-    const canvases = document.querySelectorAll("canvas");
-    const padding = 30;
-    const spacing = 50;
-    const totalHeight = Array.from(canvases).reduce((acc, canvas) => acc + canvas.height + spacing, 0);
-    const maxWidth = Math.max(...Array.from(canvases).map(c => c.width));
+document.getElementById("exportCharts").addEventListener("click", function () {
+  const chartsContainer = document.getElementById("chartsContainer");
 
-    // Cria um canvas vazio para juntar todos
-    const exportCanvas = document.createElement("canvas");
-    exportCanvas.width = maxWidth + 2 * padding;
-    exportCanvas.height = totalHeight + padding;
-    const ctx = exportCanvas.getContext("2d");
+  // Scroll para o topo da área antes da captura (opcional)
+  chartsContainer.scrollTop = 0;
 
-    // Cor de fundo (opcional)
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
-
-    // Desenha os gráficos um abaixo do outro
-    let yOffset = padding;
-    canvases.forEach(c => {
-      ctx.drawImage(c, padding, yOffset, c.width, c.height);
-      yOffset += c.height + spacing;
-    });
-
-    // Baixa a imagem
-    const link = document.createElement("a");
-    link.download = "all_charts.png";
-    link.href = exportCanvas.toDataURL();
+  html2canvas(chartsContainer, {
+    scale: 2, // melhora a resolução
+    useCORS: true,
+    allowTaint: true,
+    backgroundColor: "#fff"
+  }).then(canvas => {
+    const link = document.createElement('a');
+    link.download = 'charts.png';
+    link.href = canvas.toDataURL();
     link.click();
-  }
-</script>
+  });
+});
+</script> {% endcomment %}
 
-<style>
+{% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+  document.getElementById("exportCharts").addEventListener("click", function () {
+    const chartArea = document.querySelector(".chart-scrollable");
+
+    // Cria um clone temporário apenas com os gráficos
+    const cloned = chartArea.cloneNode(true);
+    cloned.style.padding = "20px";
+    cloned.style.backgroundColor = document.body.classList.contains("dark-mode") ? "#1f1f1f" : "#ffffff";
+
+    // Cria um container invisível para renderização
+    const hiddenDiv = document.createElement("div");
+    hiddenDiv.style.position = "fixed";
+    hiddenDiv.style.top = "-9999px";
+    hiddenDiv.style.left = "-9999px";
+    hiddenDiv.appendChild(cloned);
+    document.body.appendChild(hiddenDiv);
+
+    html2canvas(cloned, {
+      backgroundColor: cloned.style.backgroundColor,
+      scale: 2,
+      useCORS: true
+    }).then(canvas => {
+      const link = document.createElement("a");
+      link.download = "all_charts.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+
+      document.body.removeChild(hiddenDiv);
+    });
+  });
+</script> {% endcomment %}
+
+
+{% comment %} <style>
   .chart-scrollable {
+    min-height: calc(100vh - 250px);  /* ajusta a altura mínima dos gráficos */
+    overflow-y: auto;
+    padding: 0 10px 50px; /* padding extra para espaçamento no final */
+  }
+
+  {% comment %} .chart-scrollable {
     max-height: 70vh;
     overflow-y: auto;
     padding: 0 10px;
-  }
-
-  canvas {
+  } {% endcomment %}
+  {% comment %} canvas {
     background-color: transparent;
     width: 100% !important;
     height: auto !important;
   }
 </style>
-
-{% endblock %}
+{% endblock %}  {% endcomment %}
