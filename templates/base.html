@@ -176,7 +176,7 @@
     <a class="navbar-brand mb-4 ps-2" href="#">Goods In</a>
 
     <ul class="nav nav-pills flex-column mb-3">
-      <li class="nav-item">
+      <li class="nav-item mb-2">
         <form action="{% url 'logout' %}" method="post">
           {% csrf_token %}
           <button type="submit" class="btn btn-secondary">Logout</button>
