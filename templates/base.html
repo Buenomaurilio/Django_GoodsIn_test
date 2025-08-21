@@ -50,13 +50,24 @@
     .navbar {
       height: 56px;
     }
-
     .content-body {
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 56px); /* altura da navbar */
+      overflow: hidden;
+    }
+
+    .scrollable-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 10px;
+    }
+    {% comment %} .content-body {
       flex: 1;
       overflow-y: auto;
       padding: 20px;
       background-color: inherit;
-    }
+    } {% endcomment %}
 
     /* DARK MODE */
     html.dark-mode, body.dark-mode {
@@ -164,6 +175,12 @@
     <a class="navbar-brand mb-4 ps-2" href="#">Goods In</a>
 
     <ul class="nav nav-pills flex-column mb-3">
+      <li class="nav-item">
+        <form action="{% url 'logout' %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-secondary">Logout</button>
+        </form>
+      </li>
       <li class="nav-item">
         <a class="nav-link {% if request.resolver_match.url_name == 'appointment_list' %}active{% endif %}" href="{% url 'appointment_list' %}">Appointments</a>
       </li>

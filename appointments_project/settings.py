@@ -14,8 +14,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # ALLOWED_HOSTS = ['django-goodsin-2.onrender.com', 'localhost', '127.0.0.1']
 ALLOWED_HOSTS = ['*']
 
-LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/appointments/'
+# LOGIN_URL = '/login/'
+# LOGIN_REDIRECT_URL = '/appointments/'
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/appointments/dashboard/'  # usado como fallback
 
 
 INSTALLED_APPS = [
@@ -26,6 +29,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'appointments',
+    'warehouses',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -97,3 +102,5 @@ STATICFILES_FINDERS = [
 
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+AUTH_USER_MODEL = 'accounts.CustomUser'

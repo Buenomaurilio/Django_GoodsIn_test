@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Admin Dashboard (All Warehouses)</h2>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card text-bg-primary mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Total Appointments</h5>
+          <p class="card-text fs-3">{{ total_appointments }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card text-bg-success mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Total Pallets</h5>
+          <p class="card-text fs-3">{{ total_pallets }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h4>Warehouses</h4>
+  <ul class="list-group">
+    {% for warehouse in warehouses %}
+      <li class="list-group-item">{{ warehouse.name }}</li>
+    {% empty %}
+      <li class="list-group-item text-muted">No warehouses found.</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

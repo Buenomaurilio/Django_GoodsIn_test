@@ -13,5 +13,5 @@ urlpatterns = [
     path('appointments/table/', views.appointment_table_partial, name='appointment_table_partial'),
     path('dashboard/', dashboard_view, name='dashboard'),
     path('dashboard/export/', views.export_dashboard_csv, name='export_dashboard_csv'),
-
+    path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
 ]
