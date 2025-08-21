@@ -142,13 +142,35 @@ def add_appointment(request):
         form = AppointmentForm(request.POST)
         if form.is_valid():
             appointment = form.save(commit=False)
+
             if not request.user.is_superadmin:
-                appointment.warehouse = request.user.warehouse
+                if request.user.warehouse:
+                    appointment.warehouse = request.user.warehouse
+                else:
+                    messages.error(request, "You must be linked to a warehouse to create an appointment.")
+                    return redirect('appointment_list')
+
             appointment.save()
             return redirect(f"/appointments/?date={data_filter}" if data_filter else 'appointment_list')
     else:
         form = AppointmentForm()
+
     return render(request, 'appointments/add_appointment.html', {'form': form})
+
+# @login_required
+# def add_appointment(request):
+#     data_filter = request.GET.get('date')
+#     if request.method == 'POST':
+#         form = AppointmentForm(request.POST)
+#         if form.is_valid():
+#             appointment = form.save(commit=False)
+#             if not request.user.is_superadmin:
+#                 appointment.warehouse = request.user.warehouse
+#             appointment.save()
+#             return redirect(f"/appointments/?date={data_filter}" if data_filter else 'appointment_list')
+#     else:
+#         form = AppointmentForm()
+#     return render(request, 'appointments/add_appointment.html', {'form': form})
 
 @login_required
 def add_checker(request):
