@@ -4,6 +4,7 @@ import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# SECRET_KEY = 'django-insecure-dev-key'
 SECRET_KEY = 'django-insecure-dev-key'
 
 DEBUG = 'RENDER' not in os.environ
