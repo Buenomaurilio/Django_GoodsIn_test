@@ -1,4 +1,17 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <h2>Login</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Login</button>
+  </form>
+</div>
+{% endblock %}
+
+<!-- {% extends "base.html" %}
 {% load static %}
 
 {% block title %}Login{% endblock %}
@@ -17,7 +30,7 @@
   </div>
 </div>
 {% endblock %}
-
+ -->
 
 <!-- {% extends "base.html" %}
 {% load static %}
@@ -60,7 +73,7 @@
 
 <div class="login-container">
   <div class="login-box">
-    <div class="login-title">🔐 Login</div>
+    <div class="login-title"> Login</div>
     <form method="post" action="{% url 'login' %}">
       {% csrf_token %}
       {{ form.as_p }}
@@ -73,16 +86,3 @@
  -->
 
 
-<!-- {% extends 'base.html' %}
-
-{% block content %}
-<div class="container">
-  <h2>Login</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Login</button>
-  </form>
-</div>
-{% endblock %}
- -->
