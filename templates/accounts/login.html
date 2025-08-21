@@ -1,38 +1,4 @@
-{% extends 'base.html' %}
-
-{% block content %}
-<div class="container">
-  <h2>Login</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Login</button>
-  </form>
-</div>
-{% endblock %}
-
-<!-- {% extends "base.html" %}
-{% load static %}
-
-{% block title %}Login{% endblock %}
-
-{% block content %}
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-4">
-      <h2 class="text-center mb-4">Login</h2>
-      <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary w-100">Login</button>
-      </form>
-    </div>
-  </div>
-</div>
-{% endblock %}
- -->
-
-<!-- {% extends "base.html" %}
+{% extends 'base_auth.html' %}
 {% load static %}
 
 {% block title %}Login{% endblock %}
@@ -40,49 +6,45 @@
 {% block content %}
 <style>
   .login-container {
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 80vh;
   }
 
   .login-box {
-    background-color: var(--bs-body-bg);
-    padding: 30px;
+    background: #ffffff;
+    padding: 2rem;
     border-radius: 12px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    width: 100%;
     max-width: 400px;
-    width: 100%;
   }
 
-  .login-title {
+  .login-box h2 {
     text-align: center;
-    margin-bottom: 20px;
-    font-weight: bold;
-    font-size: 24px;
-  }
-
-  .login-box label {
-    font-weight: 500;
-  }
-
-  .btn-login {
-    width: 100%;
+    margin-bottom: 1.5rem;
   }
 </style>
 
-<div class="login-container">
+<div class="container login-container">
   <div class="login-box">
-    <div class="login-title"> Login</div>
-    <form method="post" action="{% url 'login' %}">
+    <h2>Login</h2>
+    <form method="post">
       {% csrf_token %}
-      {{ form.as_p }}
-
-      <button type="submit" class="btn btn-primary btn-login">Login</button>
+      <div class="mb-3">
+        <label for="id_username" class="form-label">Username</label>
+        <input type="text" name="username" class="form-control" id="id_username" required>
+      </div>
+      <div class="mb-3">
+        <label for="id_password" class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" id="id_password" required>
+      </div>
+      {% if form.errors %}
+        <div class="alert alert-danger">Invalid username or password</div>
+      {% endif %}
+      <button type="submit" class="btn btn-primary w-100">Login</button>
     </form>
   </div>
 </div>
 {% endblock %}
- -->
-
-
