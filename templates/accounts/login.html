@@ -4,6 +4,27 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-4">
+      <h2 class="text-center mb-4">Login</h2>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary w-100">Login</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+<!-- {% extends "base.html" %}
+{% load static %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
 <style>
   .login-container {
     display: flex;
@@ -49,7 +70,7 @@
   </div>
 </div>
 {% endblock %}
-
+ -->
 
 
 <!-- {% extends 'base.html' %}
