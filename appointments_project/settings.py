@@ -66,10 +66,20 @@ TEMPLATES = [
 WSGI_APPLICATION = 'appointments_project.wsgi.application'
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL')
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'goodsin_db_75pz',
+        'USER': 'goodsin_db_75pz_user',
+        'PASSWORD': 'kING8YI2Tb8JhapIvdQ3yEBKt479MgU0',
+        'HOST': 'dpg-d2jn7bbipnbc73bdb4bg-a',
+        'PORT': '5432',
+    }
 }
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=os.environ.get('DATABASE_URL')
+#     )
+# }
 
 # DATABASES = {
 #     'default': dj_database_url.config(
