@@ -120,7 +120,7 @@
             {{ appt.status_load|title }}
           </span>
         </td>
-        <td>{{ appt.notes }}</td> 
+        {# <td>{{ appt.notes }}</td> #}
           <td>
             <a href="{% url 'edit_appointment' appt.id %}" class="btn btn-sm btn-primary">Edit</a>
             <a href="{% url 'delete_appointment' appt.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
