@@ -19,6 +19,7 @@ class AppointmentForm(forms.ModelForm):
             'check_out_time',
             'bay1',
             'status_load',
+            'notes',
             # 'warehouse' será incluído dinamicamente abaixo se for superadmin
         ]
         widgets = {
