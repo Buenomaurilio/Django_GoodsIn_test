@@ -22,7 +22,7 @@ class CustomLoginView(LoginView):
     def get_success_url(self):
         if self.request.user.is_superadmin:
             return reverse('admin_dashboard')
-        return reverse('appointments_list')    
+        return reverse('appointment_list')    
         # return reverse('dashboard')
     # def get_success_url(self):
     #     user = self.request.user
