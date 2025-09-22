@@ -48,12 +48,12 @@
   </div>
   <div class="col">
     <div class="alert alert-info text-center py-2 mb-1">
-      <strong>Morning Shift:</strong> {{ morning_count }} / {{ morning_pallets }} pallets
+      <strong>Morning:</strong> {{ morning_count }} / {{ morning_pallets }} pallets
     </div>
   </div>
   <div class="col">
     <div class="alert alert-secondary text-center py-2 mb-1">
-      <strong>Back Shift:</strong> {{ back_count }} / {{ back_pallets }} pallets
+      <strong>Back:</strong> {{ back_count }} / {{ back_pallets }} pallets
     </div>
   </div>
 </div>
@@ -105,22 +105,22 @@
           <td>{{ appt.bay1 }}</td>
           <td>
             <span class="badge
-              {% if appt.status_load|lower == 'on time' %}
-                bg-success
-              {% elif appt.status_load|lower == 'rescheduled' %}
-                bg-warning text-dark
-              {% elif appt.status_load|lower == 'canceled' %}
-                text-white" style="background-color: #FF9800
-              {% elif appt.status_load|lower == 'no show up' %}
-                bg-danger
-              {% else %}
-                bg-secondary
-              {% endif %}
+            {% if appt.status_load|lower == 'on time' %}
+            bg-success
+            {% elif appt.status_load|lower == 'rescheduled' %}
+            bg-warning text-dark
+            {% elif appt.status_load|lower == 'canceled' %}
+            text-white" style="background-color: #FF9800
+            {% elif appt.status_load|lower == 'no show up' %}
+            bg-danger
+            {% else %}
+            bg-secondary
+            {% endif %}
             ">
-              {{ appt.status_load|title }}
-            </span>
-          </td>
-          <td>{{ appt.notes }}</td>
+            {{ appt.status_load|title }}
+          </span>
+        </td>
+        <td>{{ appt.notes }}</td> 
           <td>
             <a href="{% url 'edit_appointment' appt.id %}" class="btn btn-sm btn-primary">Edit</a>
             <a href="{% url 'delete_appointment' appt.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
