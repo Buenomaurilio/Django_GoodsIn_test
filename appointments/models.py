@@ -21,6 +21,7 @@ class Appointment(models.Model):
     check_out_time = models.TimeField(blank=True, null=True)
     bay1 = models.CharField(max_length=100, blank=True)
     warehouse = models.ForeignKey(Warehouse, on_delete=models.SET_NULL, null=True, blank=True)
+    notes = models.TextField(blank=True, null=True, verbose_name="Observations / Notes")
     # warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE)
 
     STATUS_CHOICES = [
